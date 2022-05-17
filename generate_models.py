@@ -14,6 +14,8 @@ data_root = './Training_data'
 os.environ['DATAPATH'] = data_root
 _makedir(os.path.join(data_root, 'CIFAR100'))
 _makedir(os.path.join(data_root, 'CIFAR10'))
+_makedir('./saved_models')
+_makedir('./results')
 os.environ["ShrinkPATH"] = './shrinkbench'
 models = ['resnet20', 'resnet32', 'resnet44', 'resnet110', 'resnet56']
 
@@ -125,13 +127,15 @@ def run_cifar100(rounds=[]):
 	exp.run_init()
 	strategies = ["MixedMagGrad"] 
 	compressions = [2, 4, 10, 20, 50]
+    model_arch = resnet56_C
 	for strategy in strategies:
 	    exp.fix_seed()
 	    #for i in range(10, 30):
 	    for i in rounds:
 	        exp.round = i
 	#         Change ResultPATH to the desired folder (should be different folder for each strategy)
-	        os.environ["ResultPATH"] = f'/uusoc/exports/scratch/xiny/project/shrinkbench/Aidan/shrinkbench/'
+	        os.environ["ResultPATH"] = f'{ROOT}/results/{model_arch}'
+	        #os.environ["ResultPATH"] = f'/uusoc/exports/scratch/xiny/project/shrinkbench/Aidan/shrinkbench/'
 	
 	        exp.state = 'Original'
 	        exp.compression = 0
