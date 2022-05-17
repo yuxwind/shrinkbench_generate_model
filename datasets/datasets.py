@@ -48,8 +48,8 @@ def dataset_path(dataset, path=None):
         if p.exists():
             # print(f"Found {dataset} under {p}") # Commented out for more compact output
             return p
-    else:
-        raise LookupError(f"Could not find {dataset} in {paths}")
+        else:
+            raise LookupError(f"Could not find {dataset} in {paths}")
 
 
 def dataset_builder(dataset, train=True, normalize=None, preproc=None, path=None):
@@ -78,7 +78,7 @@ def dataset_builder(dataset, train=True, normalize=None, preproc=None, path=None
         kwargs['split'] = 'train' if train else 'val'
     else:
         kwargs['train'] = train
-
+    kwargs['download']  = True
     path = dataset_path(dataset, path)
 
     return _constructors[dataset](path, **kwargs)
