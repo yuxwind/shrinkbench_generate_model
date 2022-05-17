@@ -3,3 +3,4 @@ Training_data/
 .ipynb_checkpoints
 results/
 saved_models
+logs/
