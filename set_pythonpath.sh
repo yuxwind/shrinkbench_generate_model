@@ -1,6 +1,2 @@
-cd ..
-DIR=`pwd`
-cd -
-export PYTHONPATH="$DIR/:$PYTHONPATH" >> ~/.bashrc
-source ~/.bashrc
-
+echo '#Set PYTHONPATH' >> ~/.zshrc
+export PYTHONPATH=$XIN_HOME:$PYTHONPATH >> ~/.zshrc
