@@ -20,7 +20,7 @@ _makedir('./saved_models')
 _makedir('./results')
 _makedir('./logs')
 _makedir('./saved_models')
-os.environ["ShrinkPATH"] = './shrinkbench'
+os.environ["ShrinkPATH"] = './'
 models = ['resnet20', 'resnet32', 'resnet44', 'resnet110', 'resnet56']
 
 
@@ -103,7 +103,6 @@ def run_cifar10(model_arch, rounds=[]):
                 exp.update_optim('SGD', 15, 1e-2)
                 exp.state = "FineTuned"
                 exp.save_model(f"{i}-{model_arch}-{exp.compression}")
-    
     
                 cifar10_log(exp, i)
     
@@ -219,13 +218,15 @@ if __name__ == '__main__':
         gpu = '0'
     os.environ['CUDA_VISIBLE_DEVICES'] = gpu
     models_opt = ['resnet20', 'resnet32', 'resnet44', 'resnet110', 'resnet56']
-    idx_opt = [0,1,2,3,4]
+    idx_opt = [0,1,2,3,4,5]
     assert(model_arch in models_opt)
     assert(idx in idx_opt)
     #one job runs 5 rounds for each model 
-    N = 6
+    N = 5
     rounds = np.arange(idx*N, (idx+1)*N)
     if dataset == "cifar10":
         run_cifar10(model_arch, rounds)	
     elif dataset == 'cifar100':
         run_cifar100(rounds+10)	
+    else:
+        print('No such dataset')
