@@ -146,16 +146,14 @@ def run_cifar100(rounds=[]):
             exp.compression = 0
             exp.pruning = False
             exp.build_model("resnet56_C")
-            #exp.update_optim(epochs=10, lr=1e-2)
-            exp.update_optim(epochs=1, lr=1e-2)
+            exp.update_optim(epochs=10, lr=1e-2)
             
             exp.run()
-            #exp.update_optim(epochs=20, lr=1e-1)
-            exp.update_optim(epochs=1, lr=1e-1)
+            exp.update_optim(epochs=20, lr=1e-1)
             exp.run()
-            #for x in [1e-2, 1e-3, 1e-4]:
-            #    exp.update_optim(epochs=10, lr=x)
-            #    exp.run()
+            for x in [1e-2, 1e-3, 1e-4]:
+                exp.update_optim(epochs=10, lr=x)
+                exp.run()
     
             cp = exp.load_model(checkpoint=True)
             exp.build_model("resnet56_C")
@@ -178,12 +176,12 @@ def run_cifar100(rounds=[]):
                 cifar100_class(exp, i)
                 cifar100_log(exp, i)
     
-                #exp.state = "Finetuned"
-                #exp.update_optim(epochs=10, lr=1e-1)
-                #exp.run()
-                #for x in [1e-2, 1e-3, 1e-4]:
-                #    exp.update_optim(epochs=5, lr=x)
-                #    exp.run()
+                exp.state = "Finetuned"
+                exp.update_optim(epochs=10, lr=1e-1)
+                exp.run()
+                for x in [1e-2, 1e-3, 1e-4]:
+                    exp.update_optim(epochs=5, lr=x)
+                    exp.run()
                     
                 cp = exp.load_model(prune=True)
                 exp.build_model("resnet56_C")
@@ -192,8 +190,7 @@ def run_cifar100(rounds=[]):
                 exp.model.load_state_dict(cp['model_state_dict'])
                 exp.optim.load_state_dict(cp['optim_state_dict'])
                 exp.eval()
-                #exp.update_optim('SGD', 15, 1e-2)
-                exp.update_optim('SGD', 1, 1e-2)
+                exp.update_optim('SGD', 15, 1e-2)
                 exp.state = "FineTuned"
                 exp.save_model(f"{i}-resnet56_C-{exp.compression}")
     
@@ -207,9 +204,7 @@ def run_cifar100(rounds=[]):
                 exp.model.load_state_dict(checkpoint['model_state_dict'])
                 exp.optim.load_state_dict(checkpoint['optim_state_dict'])
                 exp.eval()
-                #exp.update_optim(epochs=10, lr=1e-1)
-                exp.update_optim(epochs=1, lr=1e-1)
-                import pdb;pdb.set_trace()
+                exp.update_optim(epochs=10, lr=1e-1)
 
 if __name__ == '__main__':
     # for ciar10,  resnet20/resnet32/resnet44/resnet110, 0/1/2/3/4/5
