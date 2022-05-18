@@ -1,5 +1,7 @@
-torch
-torchvision
+conda create -n shrink python=3.6.13 pytorch cudatoolkit=11.3 torchvision=0.11.3  -c pytorch
+conda activate shrink
+pip install numpy pandas matplotlib tqdm notebook scikit-learn
+
 pandas
 matplotlib
 numpy

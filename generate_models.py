@@ -1,7 +1,9 @@
+import sys
+#sys.path.append('.')
+
 from shrinkbench.experiment import PruningExperiment, PruningClass, TrainingExperiment
 from shrinkbench.csv_analysis import *
 import os
-import sys
 import numpy as np
 
 def _makedir(path):
