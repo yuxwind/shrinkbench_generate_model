@@ -8,7 +8,7 @@ def _makedir(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-ROOT='./'
+ROOT='.'
 # Replace with absolute or relative paths to shrinkbench and trainning data
 data_root = './Training_data'
 os.environ['DATAPATH'] = data_root
@@ -51,7 +51,7 @@ def run_cifar10(model_arch, rounds=[]):
     #         Change ResultPATH to the desired folder (should be different folder for each strategy)
     #         I find it easier to just make an empty folder with same name as model arch to tell them apart
             os.environ["ResultPATH"] = f'{ROOT}/results/{model_arch}'
-    
+            _makedir(os.environ["ResultPATH"]) 
             exp.state = 'Original'
             exp.compression = 0
             exp.pruning = False
@@ -137,20 +137,23 @@ def run_cifar100(rounds=[]):
             exp.round = i
     #         Change ResultPATH to the desired folder (should be different folder for each strategy)
             os.environ["ResultPATH"] = f'{ROOT}/results/{model_arch}'
+            _makedir(os.environ["ResultPATH"])
             #os.environ["ResultPATH"] = f'/uusoc/exports/scratch/xiny/project/shrinkbench/Aidan/shrinkbench/'
     
             exp.state = 'Original'
             exp.compression = 0
             exp.pruning = False
             exp.build_model("resnet56_C")
-            exp.update_optim(epochs=10, lr=1e-2)
+            #exp.update_optim(epochs=10, lr=1e-2)
+            exp.update_optim(epochs=1, lr=1e-2)
             
             exp.run()
-            exp.update_optim(epochs=20, lr=1e-1)
+            #exp.update_optim(epochs=20, lr=1e-1)
+            exp.update_optim(epochs=1, lr=1e-1)
             exp.run()
-            for x in [1e-2, 1e-3, 1e-4]:
-                exp.update_optim(epochs=10, lr=x)
-                exp.run()
+            #for x in [1e-2, 1e-3, 1e-4]:
+            #    exp.update_optim(epochs=10, lr=x)
+            #    exp.run()
     
             cp = exp.load_model(checkpoint=True)
             exp.build_model("resnet56_C")
@@ -173,12 +176,12 @@ def run_cifar100(rounds=[]):
                 cifar100_class(exp, i)
                 cifar100_log(exp, i)
     
-                exp.state = "Finetuned"
-                exp.update_optim(epochs=10, lr=1e-1)
-                exp.run()
-                for x in [1e-2, 1e-3, 1e-4]:
-                    exp.update_optim(epochs=5, lr=x)
-                    exp.run()
+                #exp.state = "Finetuned"
+                #exp.update_optim(epochs=10, lr=1e-1)
+                #exp.run()
+                #for x in [1e-2, 1e-3, 1e-4]:
+                #    exp.update_optim(epochs=5, lr=x)
+                #    exp.run()
                     
                 cp = exp.load_model(prune=True)
                 exp.build_model("resnet56_C")
@@ -187,7 +190,8 @@ def run_cifar100(rounds=[]):
                 exp.model.load_state_dict(cp['model_state_dict'])
                 exp.optim.load_state_dict(cp['optim_state_dict'])
                 exp.eval()
-                exp.update_optim('SGD', 15, 1e-2)
+                #exp.update_optim('SGD', 15, 1e-2)
+                exp.update_optim('SGD', 1, 1e-2)
                 exp.state = "FineTuned"
                 exp.save_model(f"{i}-resnet56_C-{exp.compression}")
     
@@ -201,27 +205,30 @@ def run_cifar100(rounds=[]):
                 exp.model.load_state_dict(checkpoint['model_state_dict'])
                 exp.optim.load_state_dict(checkpoint['optim_state_dict'])
                 exp.eval()
-                exp.update_optim(epochs=10, lr=1e-1)
-
+                #exp.update_optim(epochs=10, lr=1e-1)
+                exp.update_optim(epochs=1, lr=1e-1)
+                import pdb;pdb.set_trace()
 
 if __name__ == '__main__':
     # for ciar10,  resnet20/resnet32/resnet44/resnet110, 0/1/2/3/4/5
     # for cifar100,resnet56 0/1/2/3
     dataset = sys.argv[1]
     model_arch = sys.argv[2] 
-    idx   = int(sys.argv[3]) # 0,1,2,3,4,5
+    #idx   = int(sys.argv[3]) # 0,1,2,3,4,5
+    idx   = sys.argv[3] # 0,1,2,3,4,5
     if len(sys.argv) > 4:
         gpu = sys.argv[4]
     else:
         gpu = '0'
     os.environ['CUDA_VISIBLE_DEVICES'] = gpu
     models_opt = ['resnet20', 'resnet32', 'resnet44', 'resnet110', 'resnet56']
-    idx_opt = [0,1,2,3,4,5]
-    assert(model_arch in models_opt)
-    assert(idx in idx_opt)
-    #one job runs 5 rounds for each model 
-    N = 5
-    rounds = np.arange(idx*N, (idx+1)*N)
+    #idx_opt = [0,1,2,3,4,5]
+    #assert(model_arch in models_opt)
+    #assert(idx in idx_opt)
+    ##one job runs 5 rounds for each model 
+    #N = 5
+    #rounds = np.arange(idx*N, (idx+1)*N)
+    rounds = np.array([int(i) for i in idx.split(',')])
     if dataset == "cifar10":
         run_cifar10(model_arch, rounds)	
     elif dataset == 'cifar100':
