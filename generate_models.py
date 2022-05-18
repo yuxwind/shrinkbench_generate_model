@@ -1,8 +1,8 @@
 import sys
 #sys.path.append('.')
 
-from experiment import PruningExperiment, PruningClass, TrainingExperiment
-from csv_analysis import *
+from shrinkbench.experiment import PruningExperiment, PruningClass, TrainingExperiment
+from shrinkbench.csv_analysis import *
 import os
 import numpy as np
 
