@@ -17,6 +17,7 @@ _makedir(os.path.join(data_root, 'CIFAR10'))
 _makedir('./saved_models')
 _makedir('./results')
 _makedir('./logs')
+_makedir('./saved_models')
 os.environ["ShrinkPATH"] = './shrinkbench'
 models = ['resnet20', 'resnet32', 'resnet44', 'resnet110', 'resnet56']
 
@@ -216,11 +217,11 @@ if __name__ == '__main__':
         gpu = '0'
     os.environ['CUDA_VISIBLE_DEVICES'] = gpu
     models_opt = ['resnet20', 'resnet32', 'resnet44', 'resnet110', 'resnet56']
-    idx_opt = [0,1,2,3,4,5]
+    idx_opt = [0,1,2,3,4]
     assert(model_arch in models_opt)
     assert(idx in idx_opt)
     #one job runs 5 rounds for each model 
-    N = 5
+    N = 6
     rounds = np.arange(idx*N, (idx+1)*N)
     if dataset == "cifar10":
         run_cifar10(model_arch, rounds)	
