@@ -10,7 +10,7 @@ server=$2
 if [ "$server" = "longclaw" ]; then
     remote=/uusoc/exports/scratch/xiny/project/shrinkbench/Aidan
     cp $remote/shrinkbench/saved_models/*$arch*  $arch/saved_models/
-    cp $remote/shrinkbench/results/$arch/*   $arch/results/
+    cp $remote/shrinkbench/results/$arch*/*   $arch/results/
 elif [ "$server" = "bluefish" ]; then
     # run this on bluefish...
     #remote=jcao@bluefish:/uusoc/exports/scratch/jcao/echo/shrinkbench
