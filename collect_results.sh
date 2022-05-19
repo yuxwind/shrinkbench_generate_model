@@ -3,14 +3,28 @@
 arch=$1
 server=$2
 
-mkdir -p $arch/saved_models
-mkdir -p $arch/results
+#mkdir -p $arch/saved_models
+#mkdir -p $arch/results
 
 
 if [ "$server" = "longclaw" ]; then
     remote=/uusoc/exports/scratch/xiny/project/shrinkbench/Aidan
     cp $remote/shrinkbench/saved_models/*$arch*  $arch/saved_models/
     cp $remote/shrinkbench/results/$arch/*   $arch/results/
+elif [ "$server" = "bluefish" ]; then
+    #remote=jcao@bluefish:/uusoc/exports/scratch/jcao/echo/shrinkbench
+    remote=longclaw:/uusoc/exports/scratch/xiny/project/shrinkbench/Aidan/shrinkbench/sync_results/    
+    echo $arch
+    echo $remote
+    scp -r ./saved_models/*$arch* $remote/$arch/saved_models/
+    scp -r ./results/$arch/* $remote/$arch/results/
+elif [ "$server" = "redfish" ]; then
+    #remote=jcao@redfish:/uusoc/exports/scratch/jcao/echo/shrinkbench
+    remote=longclaw:/uusoc/exports/scratch/xiny/project/shrinkbench/Aidan/shrinkbench/sync_results/    
+    echo $arch
+    echo $remote
+    scp -r saved_models/*$arch* $remote/$arch/saved_models/
+    scp -r results/$arch/* $remote/$arch/results
 else  
     if [ "$server" = "thor" ]; then
         remote=thor:/home/thor/xin
@@ -20,10 +34,6 @@ else
         remote=planck@cassini:/home/planck/xin
     elif [ "$server" = "curiosity" ]; then
         remote=zeus@curiosity:/home/zenus/xin/projects
-    elif [ "$server" = "bluefish" ]; then
-        remote=jcao@bluefish:/uusoc/exports/scratch/jcao/echo/shrinkbench
-    elif [ "$server" = "redfish" ]; then
-        remote=jcao@redfish:/uusoc/exports/scratch/jcao/echo/shrinkbench
     fi 
     
     echo $arch
