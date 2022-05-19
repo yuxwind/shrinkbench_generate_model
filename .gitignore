@@ -5,3 +5,4 @@ results/
 saved_models
 logs/
 experiment/__pycache__
+sync_results
